@@ -21,7 +21,7 @@ if (!process.env.PASSWORD) {
         timeout: 60000, /* 60 to timeout */
         puppeteerOptions: {
             ignoreHTTPSErrors: true,
-            headless: false,
+            headless: !!parseInt(process.env.headless),
         },
     });
 
