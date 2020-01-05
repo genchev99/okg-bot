@@ -1,3 +1,4 @@
+require('dotenv').config();
 const puppeteer = require('puppeteer');
 const {Cluster} = require('puppeteer-cluster');
 
