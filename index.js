@@ -2,6 +2,15 @@ require('dotenv').config();
 const puppeteer = require('puppeteer');
 const {Cluster} = require('puppeteer-cluster');
 
+/* Validation of credentials */
+if (!process.env.USERNAME) {
+    console.error('Please provide a proper username in the .env file');
+}
+
+if (!process.env.PASSWORD) {
+    console.error('Please provide a proper password in the .env file');
+}
+
 (async () => {
     const cluster = await Cluster.launch({
         concurrency: Cluster.CONCURRENCY_CONTEXT,
