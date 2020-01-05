@@ -29,8 +29,8 @@ if (!process.env.PASSWORD) {
     cluster.queue(async ({page}) => {
         await page.goto('https://learn.fmi.uni-sofia.bg/login/index.php');
 
-        await page.type('#username', process.env.username);
-        await page.type('#password', process.env.password);
+        await page.type('#username', process.env.USERNAME);
+        await page.type('#password', process.env.PASSWORD);
 
         await page.click('#logintn', {delay: 25});
 
@@ -51,7 +51,9 @@ if (!process.env.PASSWORD) {
 
     for (let model = 1; model <= 9; model++) {
         for (let difficulty = 0; difficulty < 3; difficulty++) {
-            cluster.queue(`http://pavel.it.fmi.uni-sofia.bg/courses/okg/tests/model.html?models=t00${model}&difficulty=${difficulty}`)
+            for (let times = 0; times < 5; times++) {
+                cluster.queue(`http://pavel.it.fmi.uni-sofia.bg/courses/okg/tests/model.html?models=t00${model}&difficulty=${difficulty}`)
+            }
         }
     }
 
