@@ -18,6 +18,11 @@ if (!process.env.PASSWORD) {
         concurrency: Cluster.CONCURRENCY_CONTEXT,
         maxConcurrency: parseInt(process.env.CONCURRENCY) || 5,
         puppeteer: puppeteer,
+        timeout: 60000, /* 60 to timeout */
+        puppeteerOptions: {
+            ignoreHTTPSErrors: true,
+            headless: false,
+        },
     });
 
     /* Logs into moodle */
@@ -43,6 +48,12 @@ if (!process.env.PASSWORD) {
 
         await page.close();
     });
+
+    for (let model = 1; model <= 9; model++) {
+        for (let difficulty = 0; difficulty < 3; difficulty++) {
+            cluster.queue(`http://pavel.it.fmi.uni-sofia.bg/courses/okg/tests/model.html?models=t00${model}&difficulty=${difficulty}`)
+        }
+    }
 
     await cluster.idle();
     await cluster.close();
