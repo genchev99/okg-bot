@@ -32,6 +32,18 @@ if (!process.env.PASSWORD) {
         await page.waitForNavigation();
     });
 
+    cluster.task(async ({page, data: url}) => {
+        await page.goto(url);
+
+        await page.waitFor('[corner=topLeft]');
+        await page.click('[corner=topLeft]');
+
+        await page.waitFor('#infoPanel');
+        await page.click('#infoPanel');
+
+        await page.close();
+    });
+
     await cluster.idle();
     await cluster.close();
 })();
