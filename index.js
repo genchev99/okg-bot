@@ -38,6 +38,33 @@ if (!process.env.PASSWORD) {
     });
 
     cluster.task(async ({page, data: url}) => {
+        await page.setRequestInterception(true);
+
+        page.on('request', request => {
+            if (request.url().endsWith('request.php') && request.method() === 'POST') {
+                console.log(request.url());
+                console.log(request.postData());
+
+                const realData = JSON.parse(request.postData());
+                //
+                // const postData = JSON.stringify({
+                //     offset: 13,
+                // }).trim();
+                //
+                // // const postData = `offset=${realData.offset}`;
+                // console.log('my post data: ', postData);
+                // console.log(request);
+                //
+                // request.continue({
+                //     'postData': postData,
+                // });
+
+                request.continue();
+            }
+
+            request.continue();
+        });
+
         await page.goto(url);
 
         await page.waitFor('[corner=topLeft]');
@@ -47,6 +74,8 @@ if (!process.env.PASSWORD) {
         await page.click('#infoPanel');
 
         await page.close();
+
+        process.exit(1)
     });
 
     for (let model = 1; model <= 9; model++) {
